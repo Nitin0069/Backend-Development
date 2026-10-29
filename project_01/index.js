@@ -1,8 +1,10 @@
 const express = require("express");
 const users = require("./MOCK_DATA.json");
-
+const fs = require("fs")
 const app = express();
 const port = 3003;
+
+app.use(express.urlencoded({extended: false}))
 
 // GET: Get all users
 app.get("/api/users", (req, res) => {
@@ -20,10 +22,20 @@ app.get("/api/users/:id", (req, res) => {
     return res.json(user);
 });
 
+
+
 // POST: Create a user
-app.post("/api/user", (req, res) => {
-    return res.json({ status: "pending" });
+app.post("/api/users", (req, res) => {
+  const body = req.body;
+  users.push({ ...body, id: users.length + 1 });
+  fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
+    return res.json({ status: "success", id: users.length });
+  });
 });
+
+app.listen(PORT, () => console.log(`Server Started at PORT:${PORT}`));
+
+
 
 // PATCH: Update a user
 app.patch("/api/user", (req, res) => {
