@@ -6,10 +6,34 @@ const port = 3003;
 
 app.use(express.urlencoded({extended: false}))
 
+app.use((req,res,next) => {
+console.log("hello from middleware 1")
+//return res.json({msg: "hello from middleware 1"})
+req.MyUserName = "nitin@";
+next()
+});
+/*
+app.use((req,res,next) => {
+    console.log("hell from middleware 2", req.MyUserName)
+    next()
+   // return res.end("hey")
+})
+
 // GET: Get all users
 app.get("/api/users", (req, res) => {
     return res.json(users);
 });
+*/
+
+
+app.use((req, res, next ) => {
+fs.appendFile("log.txt", `${Date.now()} ${req.method} ${req.path}\n `, (err,data) => {
+  next();  
+}  )
+})
+
+
+
 
 // GET: Get a single user by ID
 app.get("/api/users/:id", (req, res) => {
@@ -33,7 +57,6 @@ app.post("/api/users", (req, res) => {
   });
 });
 
-app.listen(PORT, () => console.log(`Server Started at PORT:${PORT}`));
 
 
 
@@ -57,6 +80,13 @@ const html = `
 `;
 res.send(html)
 })
+
+
+
+
+
+
+
 
 /*
 app.get("/text", (req, res) => {
