@@ -18,12 +18,15 @@ app.use((req,res,next) => {
     next()
    // return res.end("hey")
 })
+*/
 
 // GET: Get all users
 app.get("/api/users", (req, res) => {
+    res.setHeader("myname", "nitin rana")
     return res.json(users);
 });
-*/
+
+
 
 
 app.use((req, res, next ) => {

@@ -5,6 +5,7 @@ console.log(os.cpus().length)
 
 
 //Sync... 
+
  // fs.writeFileSync("./test.txt", "Hey world")
 
 //Async

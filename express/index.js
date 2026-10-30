@@ -4,8 +4,7 @@ const app = express();
 
 
 app.get('/', (req,res)=> {
-
- return res.end("this is kuch nhi page")    
+return res.end("this is kuch nhi page")    
 })
 
 app.get('/home' , (req, res) => {
