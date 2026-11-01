@@ -1,90 +1,96 @@
 const express = require("express");
-const users = require("./MOCK_DATA.json");
-const fs = require("fs")
 const app = express();
 const port = 3004;
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
 
-//Schema
-const mySchema = new mongoose.Schema({
-    firstName: {
-        type: String,
+app.use(express.urlencoded());
+
+mongoose.connect('mongodb://localhost:27017/youtube-app-1') 
+.then (()=> console.log("mongo db connected"))
+.catch((err) => console.log("error:" , err ) )
+
+const userSchema = new mongoose.Schema({
+    first_name: {
+    type: String,
     required: true,
-
     },
-    lastName: {
-        type: String,
-
+    last_name: {
+        type:  String,
     },
     email: {
         type: String,
         required: true,
         unique: true,
-    },
-    jobTitle: {
-        type: String,
-    },
-gender: {
-    type : String, 
-},
+ },
+ job_title: {
+    type: String,
+ },
+ gender: { 
+    type: String,
+ },
+},{timestamps: true})
+
+const User = mongoose.model('user', userSchema)
+
+app.post("/api/users", async (req,res) => {
+    const body = req.body;
+    if (
+        !body ||
+    !body.first_name ||
+    !body.last_name ||
+    !body.email ||
+    !body.gender ||
+    !body.job_title
+    ) {
+        return res.status(400).json({msg : "All fields are required" })
+    }
+    const result = await  User.create({
+        first_name: body.first_name,
+        last_name: body.last_name,
+        email: body.email,
+        gender: body.gender,
+        job_title: body.job_title,    
+    }) 
+    console.log("result", result)
+return res.status(201).json({message : "success"})
+})
+ // get html 
+  /*
+app.get("/users" , async (req,res) => {
+const allDbUsers = await User.find({});
+const html = `
+<ul> 
+${allDbUsers.map ((user) => `<li> ${user.first_name} </li> `).join("")} </ul> `
+return res.send(html)
+})
+*/
+// apii
+app.get  ( '/api/users', async (req,res) => {
+const allDbUsers = await User.find({});
+return res.json(allDbUsers)
 })
 
-const User = mongoose.model('user', mySchema)
-
-
-
-app.use(express.urlencoded({extended: false}))
-
-app.use((req,res,next) => {
-console.log("hello from middleware 1")
-//return res.json({msg: "hello from middleware 1"})
-req.MyUserName = "nitin@";
-next()
-});
-
-
-// GET: Get all users
-app.get("/api/users", (req, res) => {
-    res.setHeader("myname", "nitin rana")
-    return res.json(users);
-});
-
-
-app.use((req, res, next ) => {
-fs.appendFile("log.txt", `${Date.now()} ${req.method} ${req.path}\n `, (err,data) => {
-  next();  
-}  )
+app.route("/api/user/:id").get(async (req,res) => {
+    const user = await User.findById(req.params.id )
+if (!user) return res.status(404).json({error: "usernot found"})
+return res.json(user);
+})
+.patch(async (req,res) => {
+await User.findByIdAndUpdate(req.params.id, {last_name: "changes"})
+return res.json({status: "succes "})
 })
 
-// GET: Get a single user by ID
-app.get("/api/users/:id", (req, res) => {
-    const id = Number(req.params.id);
-
-    const user = users.find((user) => {
-        return user.id === id;
-    });
-
-    return res.json(user);
-});
 
 
 
-// POST: Create a user
-app.post("/api/users", (req, res) => {
-  const body = req.body;
-  users.push({ ...body, id: users.length + 1 });
-  fs.writeFile("./MOCK_DATA.json", JSON.stringify(users), (err, data) => {
-    return res.status(201).json({ status: "success", id: users.length });
-  });
-});
+ 
 
-// PATCH: Update a user
-app.patch("/api/user", (req, res) => {
-    return res.json({ status: "pending" });
-});
+    
 
-// Start server
+
+
+
 app.listen(port, () => {
     console.log("Server started at " + port);
 });
