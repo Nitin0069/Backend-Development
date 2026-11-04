@@ -2,6 +2,7 @@ const express = require("express");
 const app = express();
 const port = 3004;
 const mongoose = require('mongoose');
+const userRouter = require("./routes/")
 
 
 app.use(express.urlencoded());
@@ -9,7 +10,7 @@ app.use(express.urlencoded());
 mongoose.connect('mongodb://localhost:27017/youtube-app-1') 
 .then (()=> console.log("mongo db connected"))
 .catch((err) => console.log("error:" , err ) )
-
+/*
 const userSchema = new mongoose.Schema({
     first_name: {
     type: String,
@@ -32,7 +33,8 @@ const userSchema = new mongoose.Schema({
 },{timestamps: true})
 
 const User = mongoose.model('user', userSchema)
-
+*/
+/*
 app.post("/api/users", async (req,res) => {
     const body = req.body;
     if (
@@ -56,7 +58,7 @@ app.post("/api/users", async (req,res) => {
 return res.status(201).json({message : "success"})
 })
  // get html 
-  /*
+  
 app.get("/users" , async (req,res) => {
 const allDbUsers = await User.find({});
 const html = `
@@ -64,7 +66,7 @@ const html = `
 ${allDbUsers.map ((user) => `<li> ${user.first_name} </li> `).join("")} </ul> `
 return res.send(html)
 })
-*/
+
 // apii
 app.get  ( '/api/users', async (req,res) => {
 const allDbUsers = await User.find({});
@@ -80,12 +82,9 @@ return res.json(user);
 await User.findByIdAndUpdate(req.params.id, {last_name: "changes"})
 return res.json({status: "succes "})
 })
-
-
-
-
+*/
  
-
+app.use('/user', userRouter)
     
 
 
