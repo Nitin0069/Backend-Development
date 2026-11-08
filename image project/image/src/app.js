@@ -18,7 +18,8 @@ app.post("/create-post", upload.single("image"), async (req, res) => {
         const result = await uploadFile(req.file.buffer);
 
         console.log(result);
-            const post = create({
+        
+            const post = await postModel.create({
                 image: result.url,
                 caption: req.body.caption
         })
@@ -35,6 +36,11 @@ console.log("jo")
         });
     */
 });
+
+app.get("/create-post" , async (req,res) => {
+    const posts = await postModel.find()
+return res.json(posts)
+})
 
 module.exports = app;
 
