@@ -3,9 +3,10 @@ const app = express()
 const multer = require("multer") 
 const uploadFile = require("./services/storage_services")
 const postModel = require("./models/models")
+const cors = require("cors")
 
 app.use(express.json())
-
+app.use(cors())
 const upload = multer ({
     storage: multer.memoryStorage()
 })
@@ -37,7 +38,7 @@ console.log("jo")
     */
 });
 
-app.get("/create-post" , async (req,res) => {
+app.get("/posts" , async (req,res) => {
     const posts = await postModel.find()
 return res.json(posts)
 })
