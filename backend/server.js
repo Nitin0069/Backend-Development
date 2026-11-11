@@ -6,4 +6,4 @@ connectDB();
 
 app.listen(3008, () => {
     console.log("server runnin on 3008")
-})
+}) 
