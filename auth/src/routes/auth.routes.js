@@ -11,4 +11,4 @@ router.post("/register" , authController.registerUser )
 
 
 
-module.export = router
+module.exports = router
