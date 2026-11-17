@@ -63,7 +63,8 @@ if(!isPasswordValid) {
 
   const token = jwt.sign({
     id: user._id,
-   email: user._email
+   email: user.email,
+   role: user.role
  }, process.env.JWT_SECRET)
 
 res.cookie("token" , token)
