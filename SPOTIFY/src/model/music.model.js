@@ -11,11 +11,12 @@ const musicSchema = new mongoose.Schema({
         required: true,
     },
     artist: {
-        type: mongoose.schema.Types.ObjectID,
-         ref: "user",
-         required: true,
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+}
     }
-})
+)
 
 const musicModel = mongoose.model("music", musicSchema)
 

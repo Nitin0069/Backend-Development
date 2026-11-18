@@ -5,7 +5,7 @@
     privateKey: process.env.IMAGEKIT_PRIVATE_KEY
  })
 
- async function uploadfile(file) {
+ async function uploadFile(file) {
     const result = await ImageKitClient.files.upload({
         file: file.toString("base64"),
         fileName:"music" + Date.now(),
@@ -14,4 +14,4 @@
     return result
  }
 
- module.exports = {uploadfile}
+ module.exports = {uploadFile}
