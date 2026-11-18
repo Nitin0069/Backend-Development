@@ -22,4 +22,24 @@ next()
     }
  }
 
-module.exports ={ authArtist }
+
+ async function authUser (req,res,next) {
+    const token = req.cookies.token;
+    if(!token) {
+        return res.status(401).json({message: "unauthorised"})
+    }
+    try{
+const decoded = jwt.verify(token , process.env.JWT_SECRET)
+
+if(decoded.role != "artist" && decoded.role != "user" )
+    return res.status(403).json({message: "You dont have accesss"})
+
+req.user = decoded;
+
+next()
+
+    } catch(err) {
+        console.log(err)
+    }
+ }
+module.exports ={ authArtist, authUser}
