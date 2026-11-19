@@ -6,7 +6,7 @@ router.post("/register" ,  authcontroller.registerUser,)
 
 router.post("/login", authcontroller.loginUser)
 
-
+router.post("/logout" , authcontroller.logoutUser)
 
 
 
